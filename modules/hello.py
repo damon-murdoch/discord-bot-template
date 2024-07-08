@@ -11,26 +11,18 @@ args = ["none"]
 examples = []
 
 # Basic access
-access_type = 'basic'
+access_type = "basic"
 
-def exec(args):
+
+def exec(args, author, channel):
 
     # Result object
-    result = {
-        "error": None,
-        "result": None
-    }
+    result = {"error": None, "result": None}
 
     try:
 
-        # Default name
-        name = "World"
-
-        # At least one argument
-        if len(args) > 0:
-
-            # Set the name to the provided name
-            name = args[0]
+        # Author nickname
+        name = author.nick
 
         # Set the result to the hello message
         result["result"] = f"Hello {name}!"

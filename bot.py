@@ -23,7 +23,7 @@ from src.module import load_modules, process_command
 import src.constant as constant
 
 # Create discord bot
-bot = commands.Bot(intents=bot_intents)
+bot = commands.Bot(command_prefix=".", intents=bot_intents)  # Not used
 
 # Bot root directory
 BOT_FOLDER = os.path.dirname(os.path.realpath(__file__))
@@ -69,7 +69,7 @@ async def on_message(message):
                 )
 
             # Split the command into tokens and remove the prefix
-            tokens = content[len(config.COMMAND_PREFIX) :].split("")
+            tokens = content[len(config.COMMAND_PREFIX) :].split(" ")
 
             # Command name is the first token
             command = tokens[0]
@@ -109,7 +109,9 @@ async def on_message(message):
                 else:  # No file defined
 
                     # Send the message to the channel
-                    await bot_response.send_message([msg], channel, config.MESSAGE_LENGTH)
+                    await bot_response.send_message(
+                        [msg], channel, config.MESSAGE_LENGTH
+                    )
 
                 log.write_log(f"Response Received: {msg}", "general")
 
@@ -132,6 +134,4 @@ if token:
     # Start the bot
     bot.run(token)
 else:  # No token
-    raise Exception(
-        "No discord token! Please set DISCORD_TOKEN in config.py!"
-    )
+    raise Exception("No discord token! Please set DISCORD_TOKEN in config.py!")

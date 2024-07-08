@@ -8,9 +8,13 @@ import importlib.util
 
 ## Internal Module ##
 
-import constant
+from src.permissions import check_author_permissions, check_channel_permissions
+
+import src.constant as constant
+import src.log as log
+
+# Configuration File
 import config
-import log
 
 # Given a list of modules,
 # generates a help message listing
@@ -206,14 +210,18 @@ def process_command(command, args, author, channel):
 
                 # Dereference access type
                 access_type = module.access_type
-                
+
                 # Check if channel has access to the command
-                if check_channel_access(channel, access_type) == False:
-                    raise Exception(f"Unrecognised command: '{command}'") # Do not leak commands
+                if check_channel_permissions(channel, access_type) == False:
+                    raise Exception(
+                        f"Unrecognised command: '{command}'"
+                    )  # Do not leak commands
 
                 # Check if the author has access to the command
-                if check_author_access(author, access_type) == False:
-                    raise Exception(f"You do not have access to this command!") # More useful error
+                if check_author_permissions(author, access_type) == False:
+                    raise Exception(
+                        f"You do not have access to this command"
+                    )  # More useful error
 
                 # Execute the command
                 result = module.exec(args, author, channel)

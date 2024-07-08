@@ -2,10 +2,10 @@
 import discord
 
 # Logging
-import log
+import src.log as log
 
 # Constant values
-import constant
+import src.constant as constant
 
 # Sends a file to the channel
 
