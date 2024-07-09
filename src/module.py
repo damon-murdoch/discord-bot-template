@@ -29,7 +29,7 @@ import config
 LOADED_MODULES = []
 
 
-def get_help(modules, args):
+def get_help(modules, args, author, channel):
 
     # Will be joined at the end
     helpmsg = [
@@ -76,6 +76,21 @@ def get_help(modules, args):
         if found:
 
             try:
+                # Dereference access type
+                access_type = module.access_type
+
+                # Check if channel has access to the command
+                if check_channel_permissions(channel, access_type) == False:
+                    raise Exception(
+                        f"Unrecognised command: '{module.names[0]}'"
+                    )  # Do not leak commands
+
+                # Check if the author has access to the command
+                if check_author_permissions(author, access_type) == False:
+                    raise Exception(
+                        f"You do not have access to this command"
+                    )  # More useful error
+
                 # Add the command help to the string
 
                 # Basic Info
@@ -200,7 +215,7 @@ def process_command(command, args, author, channel):
 
         # Special Case: Help Command
         if command == "help":
-            return get_help(modules, args)
+            return get_help(modules, args, author, channel)
 
         # Loop over the modules
         for module in modules:
